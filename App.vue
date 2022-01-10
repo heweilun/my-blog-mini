@@ -12,8 +12,8 @@
 	}
 </script>
 
-<style>
-	/* @import "/wxcomponents/vant/dist/common/index.wxss"; */
+<style lang="scss">
+	@import "@/uni_modules/uview-ui/index.scss";
 	/*每个页面公共css */
 	.page-container {
 		height: 100vh;

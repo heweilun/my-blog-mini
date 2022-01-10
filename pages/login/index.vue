@@ -9,11 +9,7 @@
 				</view>
 			</view>
 			<view class="login-form">
-				<form @submit="loginSubmit">
-					<input type="text" name="userName" placeholder="用户名"/>
-					<input type="text" name="password" password=""  placeholder="密码"/>
-					<button type="primary" form-type="submit">登录</button>
-				</form>
+				<u-button type="primary" text="登录"></u-button>
 			</view>
 		</view>
 	</view>
@@ -37,7 +33,7 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="scss">
 	.login-page{
 		display: flex;
 		justify-content: center;
