@@ -1,20 +1,13 @@
 <template>
 	<view>
-		<view>
-			<text selectable>首页</text>
-		</view>
-		<view>
-			<text>首页2</text>
-		</view>
+		发布
 	</view>
-	
 </template>
 
 <script>
 	export default {
 		data() {
 			return {
-				title: 'Hello'
 			}
 		},
 		onLoad() {

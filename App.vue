@@ -13,5 +13,9 @@
 </script>
 
 <style>
+	/* @import "/wxcomponents/vant/dist/common/index.wxss"; */
 	/*每个页面公共css */
+	.page-container {
+		height: 100vh;
+	}
 </style>
