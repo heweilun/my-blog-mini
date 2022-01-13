@@ -1,14 +1,48 @@
 <template>
 	<view class="page-container login-page">
 		<view class="login-container">
-			<view class="login-header"><text space="ensp">欢迎使用  我的小程序</text></view>
-			<view class="login-tip"><text space="ensp">立即登录，创建自己的博客内容</text></view>
+			<!-- <view class="login-header"><text space="ensp">欢迎使用  我的小程序</text></view>
+			<view class="login-tip"><text space="ensp">立即登录，创建自己的博客内容</text></view> -->
 			<view class="login-icon">
 				<view class="login-circle">
-					<image style="width: 95rpx; height: 95rpx;" mode="scaleToFill" :src="iconUrl"></image>
+					<u-icon name="account-fill" size="75" color="#cacaca"></u-icon>
 				</view>
 			</view>
 			<view class="login-form">
+				<u--form
+					labelPosition="left"
+					:model="loginState"
+					ref="loginForm"
+				>
+					<u-form-item
+						prop="userInfo.username"
+					>
+						<u--input
+							v-model="loginState.userInfo.username"
+							shape="circle"
+							prefixIcon="account"
+							prefixIconStyle="font-size: 22px;color: #3c9cff"
+							placeholder="请输入用户名"
+							clearable
+						></u--input>
+					</u-form-item>
+					<u-form-item
+						prop="userInfo.password"
+					>
+						<u--input
+							v-model="loginState.userInfo.password"
+							shape="circle"
+							prefixIcon="lock"
+							prefixIconStyle="font-size: 22px;color: #3c9cff"
+							placeholder="请输入密码"
+							password="true"
+							clearable
+						></u--input>
+					</u-form-item>
+					<u-form-item>
+						<u-button type="primary" @click="loginSubmit" shape="circle">登录</u-button>
+					</u-form-item>
+				</u--form>
 			</view>
 		</view>
 	</view>
@@ -18,15 +52,62 @@
 	export default {
 		data() {
 			return {
-				iconUrl: require('@/static/login/login-icon.png')
+				loginState: {
+					userInfo: {
+						username: null,
+						password: null
+					}
+				},
+				rules: {
+					'userInfo.username': [{
+						type: 'string',
+						required: true,
+						message: '请填写用户名',
+						trigger: ['blur', 'change']
+					},{
+						pattern: /^[0-9a-zA-Z]*$/g,
+						transform(value) {
+							return String(value);
+						},
+						message: '用户名仅支持字母数字下划线',
+					}],
+					'userInfo.password': [{
+						type: 'string',
+						required: true,
+						message: '请填写密码',
+						trigger: ['blur', 'change']
+					},{
+						min: 6,
+						max: 18,
+						message: '密码长度在6-18位之间',
+					},{
+						pattern: /^[0-9a-zA-Z_]*$/g,
+						transform(value) {
+							return String(value);
+						},
+						message: '密码只能包含字母、数字、下划线',
+					}],
+				}
 			}
+		},
+		onReady() {
+			// 如果需要兼容微信小程序，并且校验规则中含有方法等，只能通过setRules方法设置规则
+			this.$refs.loginForm.setRules(this.rules)
 		},
 		onLoad() {
 
 		},
 		methods: {
-			loginSubmit(e) {
-				console.log(e.detail.value)
+			loginSubmit() {
+				this.$refs.loginForm.validate().then(res => {
+					// this.userInfo
+					this.$httpRequest('/api/blog/login').then(e=>{
+						console.log(e)
+					}).catch(error =>{
+						console.log(error)
+					})
+				}).catch(errors => {
+				})
 			}
 		}
 	}
