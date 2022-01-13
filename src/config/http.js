@@ -1,5 +1,5 @@
 const requerst = {
-	localApi: 'http://41.226.168.107',
+	localApi: 'http://127.0.0.1:8000',
 	serverApi: ''
 }
 

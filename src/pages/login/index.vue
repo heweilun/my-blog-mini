@@ -100,8 +100,13 @@
 		methods: {
 			loginSubmit() {
 				this.$refs.loginForm.validate().then(res => {
-					// this.userInfo
-					this.$httpRequest('/api/blog/login').then(e=>{
+					const { username, password } = this.loginState.userInfo
+					this.$httpRequest('/api/user/login',{
+						data: {
+							username,
+							password
+						}
+					}).then(e=>{
 						console.log(e)
 					}).catch(error =>{
 						console.log(error)
@@ -143,9 +148,6 @@
 					align-items: center;
 					justify-content: center;
 				}
-			}
-			.login-form {
-				
 			}
 		}
 	}

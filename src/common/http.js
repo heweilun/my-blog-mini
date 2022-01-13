@@ -1,7 +1,8 @@
 const NODE_ENV = process.env.NODE_ENV
 import { requerst } from "../config/http.js"
 
-const httpRequest = ((url, type, data, header) => {
+const httpRequest = ((url, options) => {
+	const {type, data, header} = options?options:{}
 	return new Promise((resolve, reject) => {
 		uni.request({
 		    url: NODE_ENV === 'development'?`${requerst.localApi}${url}`:`${requerst.serverApi}${url}`,
