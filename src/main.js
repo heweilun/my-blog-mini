@@ -9,6 +9,7 @@ import Vue from 'vue'
 Vue.config.productionTip = false
 Vue.prototype.$httpRequest= httpRequest
 Vue.use(uView)
+uni.$u.config.unit = 'rpx'
 App.mpType = 'app'
 const app = new Vue({
     ...App
