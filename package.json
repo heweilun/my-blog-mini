@@ -1,5 +1,5 @@
 {
-  "name": "my-blog-app",
+  "name": "my-blog-mini",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -88,6 +88,7 @@
     "jest": "^25.4.0",
     "mini-types": "*",
     "miniprogram-api-typings": "*",
+    "moment": "^2.29.1",
     "postcss-comment": "^2.0.0",
     "sass": "^1.47.0",
     "vue-template-compiler": "^2.6.11"

@@ -1,6 +1,8 @@
 import App from './App'
 import uView from "uview-ui"
 import httpRequest from './common/http.js'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
 
 
 
@@ -10,6 +12,11 @@ Vue.config.productionTip = false
 Vue.prototype.$httpRequest= httpRequest
 Vue.use(uView)
 uni.$u.config.unit = 'rpx'
+// Vue.use(moment)
+// Vue.filter('dateFormat',date=>{
+//  return moment(date).format('YYYY-MM-DD HH:mm:ss')
+// })
+Vue.prototype.$moment = moment
 App.mpType = 'app'
 const app = new Vue({
     ...App
