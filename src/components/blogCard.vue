@@ -1,14 +1,19 @@
 <template name="blogCard">
-	<view class="blog_card">
-		<view class="blog_title">
-			<sunui-omitted :text="data.title" :sty="sty" :clamp="1"/>
-			<!-- <text>{{data.createtime | dateFormat}}</text> -->
-			<text>{{this.$moment(data.createtime)}}</text>
+	<view class="blog_card" @click="navigateDetail">
+		<view class="blog_title" >
+			<sunui-omitted :text="data.title" sty="max-width: 320rpx" :clamp="1"/>
+			<text class="blog_createtime">{{this.$moment(data.createtime).format('YYYY-MM-DD HH:mm:ss')}}</text>
 		</view>
 		<u-divider :hairline="true"></u-divider>
 		<view class="blog_content">
-			{{data.content}}
+			<sunui-omitted :text="data.content" :clamp="3"/>
 		</view>
+		<view class="blog_control">
+			<view class="blog_visitor">
+				<u-icon name="eye" size="15" color="rgb(86,195,200)"></u-icon><text class="visitor_number">{{12}}</text>浏览
+			</view>
+		</view>
+		<view class="card_margin"></view>
 	</view>
 </template>
 
@@ -24,15 +29,29 @@
 		},
 		data() {
 			return {
-				sty:'max-width: 360rpx'
+				
 			};
+		},
+		methods: {
+			navigateDetail() {
+				const { createtime, title } = this.data
+				uni.navigateTo({
+				    url: `/pages/detail/detail?createtime=${createtime}&${title}`,
+					fail(e) {
+						console.log(e)
+					}
+				});
+			},
 		}
 	}
 </script>
 
 <style lang="scss">
 	.blog_card {
-		margin-bottom: 15rpx;
+		.card_margin {
+			background: #f2f2f2;
+			height: 15rpx;
+		}
 		background: #fff;
 		overflow: hidden;
 		.blog_title{
@@ -42,14 +61,29 @@
 			justify-content: space-between;
 			padding: 0 30rpx;
 			height: 65rpx;
-			.title_view {
-				height: 64rpx;
-				max-width: 120rpx;
+			.blog_createtime {
+				font-size: 26rpx;
+				color: rgb(161,161,161);
 			}
 		}
 		.blog_content {
-			min-height: 180rpx;
 			padding: 0 30rpx;
+		}
+		.blog_control {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			padding: 0 30rpx;
+			height: 70rpx;
+			.blog_visitor {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				font-size: 30rpx;
+				.visitor_number {
+					padding: 0 10rpx;
+				}
+			}
 		}
 	}
 </style>

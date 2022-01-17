@@ -1,8 +1,8 @@
 <template>
 	<view class="page-container index-page">
-		<u-navbar :autoBack="false" >
+		<u-navbar :autoBack="false">
 			<view slot="left" >
-				<u-search shape="round" v-model="keyword" :clearabled="true" :showAction="false" placeholder="请输入博客标题" @search="blogSearch" @clear="clearSearch"></u-search>
+				<u-search shape="round" :clearabled="true" :showAction="false" placeholder="请输入博客标题" @focus="navigateSearch"></u-search>
 			</view>
 		</u-navbar>
 		<u-subsection :list="list" :current="selectSection" @change="sectionChange"></u-subsection>
@@ -18,21 +18,19 @@
 				</scroll-view>
 			</swiper-item>
 		</swiper>
-		<u-back-top :scroll-top="scrollTop" icon="arrow-up"></u-back-top>
+		<u-back-top :scrollTop="scrollTop" top="5" bottom="100" class="page_backTop"></u-back-top>
 	</view>
 	
 </template>
 
 <script>
 	import blogCard from "components/blogCard.vue"
-	
 	export default {
 		components: {
 			blogCard,
 		},
 		data() {
 			return {
-				keyword: null,
 				scrollTop: 0,
 				data: null,
 				list: ['所有', '我的'],
@@ -45,19 +43,24 @@
 		onPageScroll(e) {
 			this.scrollTop = e.scrollTop;
 		},
-		onReachBottom(e) {
-			console.log(e)
-		},
 		methods: {
-			upper: function(e) {
-				console.log(e)
+			navigateSearch() {
+				uni.navigateTo({
+				    url: '/pages/search/search',
+					fail(e) {
+						console.log(e)
+					}
+				});
 			},
-			lower: function(e) {
-				console.log(e)
-			},
-			clearSearch() {
-				this.keyword = null
-				this.blogSearch()
+			blogSearch() {
+				this.$httpRequest('/api/blog/list',{
+					type: 'GET',
+				}).then(result=>{
+					const {data} = result.data
+					this.data = data
+				}).catch(error =>{
+					console.log(error)
+				})
 			},
 			swiperChange(e) {
 				this.selectSection = e.detail.current
@@ -65,26 +68,13 @@
 			sectionChange(index) {
 				this.selectSection = index;
 			},
-			blogSearch() {
-				this.$httpRequest('/api/blog/list',{
-					type: 'GET',
-					data: {
-						keyword: this.keyword
-					}
-				}).then(result=>{
-					const {data} = result.data
-					this.data = data
-				}).catch(error =>{
-					console.log(error)
-				})
-			}
+			
 		}
 	}
 </script>
 
 <style scoped lang="scss">
 	.index-page {
-		background: #f2f2f2;
 		.swiper {
 			height: calc(100% - 225rpx);
 			.scroll-Y {
