@@ -19,6 +19,7 @@
 
 <script>
 	import sunuiOmitted from "components/sunui-omitted.vue"
+	import { navigeteUrl } from "common/navigate.js"
 	export default {
 		components: {
 			sunuiOmitted
@@ -35,12 +36,13 @@
 		methods: {
 			navigateDetail() {
 				const { createtime, title } = this.data
-				uni.navigateTo({
-				    url: `/pages/detail/detail?createtime=${createtime}&${title}`,
-					fail(e) {
-						console.log(e)
-					}
-				});
+				this.$navigeteUrl(`/pages/detail/detail?createtime=${createtime}&${title}`)
+				// uni.navigateTo({
+				//     url: ,
+				// 	fail(e) {
+				// 		console.log(e)
+				// 	}
+				// });
 			},
 		}
 	}

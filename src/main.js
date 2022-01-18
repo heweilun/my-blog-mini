@@ -1,6 +1,7 @@
 import App from './App'
 import uView from "uview-ui"
 import httpRequest from './common/http.js'
+import {navigeteUrl} from './common/navigate.js'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import store from './store'
@@ -10,6 +11,7 @@ import store from './store'
 import Vue from 'vue'
 Vue.config.productionTip = false
 Vue.prototype.$httpRequest= httpRequest
+Vue.prototype.$navigeteUrl = navigeteUrl
 Vue.use(uView)
 uni.$u.config.unit = 'rpx'
 Vue.prototype.$store = store

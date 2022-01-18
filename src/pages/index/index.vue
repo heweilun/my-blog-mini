@@ -8,7 +8,7 @@
 		<u-subsection :list="list" :current="selectSection" @change="sectionChange"></u-subsection>
 		<swiper class="swiper" :indicator-dots="false" :current="selectSection" :vertical="false" @change="swiperChange">
 			<swiper-item>
-				<scroll-view :scroll-y="true" class="scroll-Y" @scroll="scroll">
+				<scroll-view :scroll-top="scrollTop" :scroll-y="true" class="scroll-Y" @scroll="scroll">
 					<blogCard v-for=" (item,index) in data" :data="item" :key="index"></blogCard>
 				</scroll-view>
 			</swiper-item>
@@ -18,7 +18,7 @@
 				</scroll-view>
 			</swiper-item>
 		</swiper>
-		<u-back-top :scrollTop="scrollTop" top="2" bottom="100" class="page_backTop"></u-back-top>
+		<u-back-top :scrollTop="old.scrollTop" top="2" bottom="100" @click="backTop"></u-back-top>
 	</view>
 	
 </template>
@@ -32,6 +32,9 @@
 		data() {
 			return {
 				scrollTop: 0,
+				old: {
+					scrollTop: 0
+				},
 				data: null,
 				list: ['所有', '我的'],
 				selectSection: 0
@@ -40,11 +43,16 @@
 		onLoad() {
 			this.blogSearch()
 		},
-		
 		methods: {
+			backTop() {
+				this.scrollTop = this.old.scrollTop
+				this.$nextTick(() => {
+					this.scrollTop = 0
+				});
+			},
 			scroll(e) {
 				//onPageScroll删除页面滚动监听 改用scroll-view的滚动监听
-				this.scrollTop = e.detail.scrollTop
+				this.old.scrollTop = e.detail.scrollTop
 			},
 			navigateSearch() {
 				uni.navigateTo({
