@@ -1,5 +1,6 @@
 import App from './App'
 import uView from "uview-ui"
+// import 'weapp-cookie'
 import httpRequest from './common/http.js'
 import {navigeteUrl} from './common/navigate.js'
 import moment from 'moment'

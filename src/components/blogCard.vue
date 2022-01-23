@@ -35,14 +35,8 @@
 		},
 		methods: {
 			navigateDetail() {
-				const { createtime, title } = this.data
-				this.$navigeteUrl(`/pages/detail/detail?createtime=${createtime}&${title}`)
-				// uni.navigateTo({
-				//     url: ,
-				// 	fail(e) {
-				// 		console.log(e)
-				// 	}
-				// });
+				const { createtime, title, id } = this.data
+				this.$navigeteUrl(`/pages/detail/detail?id=${id}`)
 			},
 		}
 	}

@@ -11,6 +11,7 @@
 				<scroll-view :scroll-top="scrollTop" :scroll-y="true" class="scroll-Y" @scroll="scroll">
 					<blogCard v-for=" (item,index) in data" :data="item" :key="index"></blogCard>
 				</scroll-view>
+				1111
 			</swiper-item>
 			<swiper-item>
 				<scroll-view :scroll-y="true" class="scroll-Y" @scroll="scroll">
@@ -66,8 +67,7 @@
 				this.$httpRequest('/api/blog/list',{
 					type: 'GET',
 				}).then(result=>{
-					const {data} = result.data
-					this.data = data
+					this.data = result.data
 				}).catch(error =>{
 					console.log(error)
 				})

@@ -1,7 +1,11 @@
 const NODE_ENV = process.env.NODE_ENV
+import cookies from 'weapp-cookie'
 import { requerst } from "../config/http.js"
+import store from '../store'
+
 
 const httpRequest = ((url, options) => {
+	cookies.has('userid') && cookies.getCookie('userid').isExpired() && cookies.clearCookies()//cookie过期清除？
 	const {type, data, header} = options?options:{}
 	return new Promise((resolve, reject) => {
 		uni.request({
@@ -10,12 +14,20 @@ const httpRequest = ((url, options) => {
 		    data: data || {},
 		    header: header || {'content-type' : "application/json"},
 		}).then((response) => {
-			console.log(response)
             let [error, res] = response;
 			if(error) {
 				return reject(error)
 			}
-            return resolve(res)
+			if(res.data.errno === 401) {
+				uni.reLaunch({
+					url: '/pages/login/index'
+				})
+			}
+			if(res.data.errno !== 0) {
+				return reject(res.data)
+			}
+			
+            return resolve(res.data)
         })
 	})
 })
@@ -29,8 +41,8 @@ const whiteList = [
 
 
 function hasPermission (url) {
-    // 在白名单中或有storage，直接跳转
-    if(whiteList.indexOf(url) !== -1 || uni.getStorageSync('userInfo').hasOwnProperty('userId')) {
+    // 在白名单中，直接跳转
+    if(whiteList.indexOf(url) !== -1 && !store.state.hasLogin) {
         return true
     }
     return false
@@ -38,25 +50,20 @@ function hasPermission (url) {
 
 uni.addInterceptor('request', {
   invoke(args) {
-    // request 触发前拼接 url 
-	if(!hasPermission(args.url)){
-		uni.reLaunch({
-			url: '/pages/login/index'
-		})
-		return false
-	}
+	hasPermission(args.url)
+	// request 触发前拼接 url 
 	args.url = NODE_ENV === 'development'?`${requerst.localApi}${args.url}`:`${requerst.serverApi}${args.url}`
 	return true
-	
   },
-  success(args) {
+  success(res) {
     // 请求成功后，修改code值为1
+	
   }, 
   fail(err) {
-    console.log('interceptor-fail',err)
+    // console.log('interceptor-fail',err)
   }, 
   complete(res) {
-    console.log('interceptor-complete',res)
+    // console.log('interceptor-complete',res)
   }
 })
 export default httpRequest

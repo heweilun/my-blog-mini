@@ -2,9 +2,9 @@
 	<view class="page-container search-page">
 		<u-search margin="10rpx 30rpx" shape="round" v-model="keyword" :clearabled="true" :showAction="true" :actionStyle="{color: 'rgb(140,227,185)'}" placeholder="请输入关键字" @search="blogSearch" @clear="clearSearch" :focus="true" @custom="blogSearch"></u-search>
 		<u-toast ref="uToast"></u-toast>
-		<scroll-view :scroll-top="scrollTop" :scroll-y="true" class="scroll-Y">
+		<!-- <scroll-view :scroll-top="scrollTop" :scroll-y="true" class="scroll-Y"> -->
 			<blogCard v-for=" (item,index) in data" :data="item" :key="index"></blogCard>
-		</scroll-view>
+		<!-- </scroll-view> -->
 	</view>
 </template>
 
@@ -37,8 +37,7 @@
 							keyword: this.keyword
 						}
 					}).then(result=>{
-						const {data} = result.data
-						this.data = data
+						this.data = result.data
 					}).catch(error =>{
 						this.$refs.uToast.show({
 							type: 'error',
