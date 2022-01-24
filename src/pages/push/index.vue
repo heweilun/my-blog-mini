@@ -1,39 +1,105 @@
 <template>
-	<view>
-		<editor id="editor" class="ql-container" :placeholder="placeholder" @ready="onEditorReady"></editor>
-		<button type="warn" @tap="undo">撤销</button>
+	<view class="blog_push">
+		<u-toast ref="uToast"></u-toast>
+		<u--form
+			labelPosition="top"
+			:model="pushData"
+			ref="pushForm"
+		>
+			<u-form-item
+				prop="title"
+			>
+				<u--input
+					v-model="pushData.title"
+					placeholder="请输入标题"
+					clearable
+				></u--input>
+			</u-form-item>
+			<u-form-item
+				prop="content"
+			>
+				<u--textarea v-model="pushData.content" placeholder="请输入内容" ></u--textarea>
+			</u-form-item>
+			<u-form-item>
+				<u-button type="primary" :loading="loading" @click="pushCommit" shape="circle">发布</u-button>
+			</u-form-item>
+		</u--form>
 	</view>
 </template>
 
 <script>
+	import { mapState, mapMutations } from 'vuex'
 	export default {
 		data() {
 			return {
-				placeholder: "请输入博客内容"
+				pushData: {
+					title: null,
+					content: null
+				},
+				loading: false,
+				rules: {
+					'title': [{
+						type: 'string',
+						required: true,
+						message: '请输入标题',
+						trigger: ['blur', 'change']
+					}],
+					'content': [{
+						type: 'string',
+						required: true,
+						message: '请输入内容',
+						trigger: ['blur', 'change']
+					}],
+				}
 			}
 		},
-		onLoad() {
-
+		computed:{
+			...mapState(['hasLogin'])
+		},
+		onReady() {
+			// 如果需要兼容微信小程序，并且校验规则中含有方法等，只能通过setRules方法设置规则
+			this.$refs.pushForm.setRules(this.rules)
+		},
+		onShow() {
+			!this.hasLogin && uni.reLaunch({
+				url: '/pages/login/index'
+			})
 		},
 		methods: {
-			onEditorReady() {
-				// #ifdef MP-BAIDU
-				this.editorCtx = requireDynamicLib('editorLib').createEditorContext('editorId');
-				// #endif
-
-				// #ifdef APP-PLUS || H5 ||MP-WEIXIN
-				uni.createSelectorQuery().select('#editor').context((res) => {
-				  this.editorCtx = res.context
-				}).exec()
-				// #endif
-			},
-			undo() {
-				this.editorCtx.undo()
+			pushCommit() {
+				this.$refs.pushForm.validate().then(res => {
+					this.loading = true
+					const { title, content } = this.pushData
+					this.$httpRequest('/api/blog/new',{
+						type: 'POST',
+						data: {
+							title,
+							content
+						}
+					}).then(result=>{
+						this.$refs.uToast.show({
+							type: 'success',
+							message: `博客发布成功`,
+						})
+						this.loading = false
+					}).catch(error =>{
+						this.$refs.uToast.show({
+							type: 'error',
+							message: error.message,
+						})
+						this.loading = false
+					})
+				}).catch(errors => {
+					this.loading = false
+				})
 			}
 		}
 	}
+	
 </script>
 
 <style>
-	
+	.blog_push {
+		padding: 30rpx;
+	}
 </style>

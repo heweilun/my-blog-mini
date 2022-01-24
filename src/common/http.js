@@ -15,8 +15,9 @@ const httpRequest = ((url, options) => {
 		    header: header || {'content-type' : "application/json"},
 		}).then((response) => {
             let [error, res] = response;
+			console.log(error)
 			if(error) {
-				return reject(error)
+				return reject(new Error(error.errMsg))
 			}
 			if(res.data.errno === 401) {
 				uni.reLaunch({

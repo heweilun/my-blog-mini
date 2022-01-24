@@ -4,7 +4,8 @@
 		<view v-if="!loading">
 			<view class="detail_title">{{data.title}}</view>
 			<view class="detail_time">
-				<view>{{this.$moment(data.createtime).format('YYYY-MM-DD HH:mm:ss')}}</view>
+				<view>{{this.$moment(data.createtime).format('YYYY-MM-DD')}}</view>
+				<view><u--text :text="data.author" type="primary"></u--text></view>
 			</view>
 			<view class="detail_content">{{data.content}}</view>
 		</view>
