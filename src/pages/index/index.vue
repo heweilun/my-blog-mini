@@ -9,13 +9,12 @@
 		<swiper class="swiper" :indicator-dots="false" :current="selectSection" :vertical="false" @change="swiperChange">
 			<swiper-item>
 				<scroll-view :scroll-top="scrollTop" :scroll-y="true" class="scroll-Y" @scroll="scroll">
-					<blogCard v-for=" (item,index) in data" :data="item" :key="index"></blogCard>
+					<blogCard v-for="item in data" :data="item" :key="item.id"></blogCard>
 				</scroll-view>
-				1111
 			</swiper-item>
 			<swiper-item>
-				<scroll-view :scroll-y="true" class="scroll-Y" @scroll="scroll">
-					<blogCard v-for=" (item,index) in data" :data="item" :key="index"></blogCard>
+				<scroll-view :scroll-top="scrollTop" :scroll-y="true" class="scroll-Y" @scroll="scroll">
+					<blogCard v-for="item in data" :data="item" :key="item.id"></blogCard>
 				</scroll-view>
 			</swiper-item>
 		</swiper>
@@ -25,10 +24,14 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
 	import blogCard from "components/blogCard.vue"
 	export default {
 		components: {
 			blogCard,
+		},
+		computed:{
+			...mapState(['hasLogin', 'userInfo'])
 		},
 		data() {
 			return {
@@ -41,7 +44,7 @@
 				selectSection: 0
 			}
 		},
-		onLoad() {
+		onShow() {
 			this.blogSearch()
 		},
 		methods: {
@@ -63,9 +66,10 @@
 					}
 				});
 			},
-			blogSearch() {
+			blogSearch(params) {
 				this.$httpRequest('/api/blog/list',{
 					type: 'GET',
+					data: params?params:null
 				}).then(result=>{
 					this.data = result.data
 				}).catch(error =>{
@@ -74,11 +78,26 @@
 			},
 			swiperChange(e) {
 				this.selectSection = e.detail.current
+				this.getList()
 			},
 			sectionChange(index) {
-				this.selectSection = index;
+				this.selectSection = index
+				this.getList()
 			},
-			
+			getList() {
+				this.backTop()
+				if(!this.hasLogin && this.selectSection===1) {
+					uni.reLaunch({
+						url: '/pages/login/index'
+					})
+				}else if(this.selectSection===1){
+					this.blogSearch({
+						author: this.userInfo.username,
+					})
+				}else {
+					this.blogSearch()
+				}
+			}
 		}
 	}
 </script>

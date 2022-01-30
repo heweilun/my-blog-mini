@@ -18,7 +18,7 @@
 			<u-form-item
 				prop="content"
 			>
-				<u--textarea v-model="pushData.content" placeholder="请输入内容" ></u--textarea>
+				<u--textarea v-model="pushData.content" :count="true" :maxlength="500" placeholder="请输入内容" ></u--textarea>
 			</u-form-item>
 			<u-form-item>
 				<u-button type="primary" :loading="loading" @click="pushCommit" shape="circle">发布</u-button>
@@ -33,8 +33,8 @@
 		data() {
 			return {
 				pushData: {
-					title: null,
-					content: null
+					title: '',
+					content: ''
 				},
 				loading: false,
 				rules: {
@@ -66,15 +66,23 @@
 			})
 		},
 		methods: {
+			textFormat(val) {
+				// 格式化文字展示文本域格式文字
+				if (val) {
+					val = val.replace(/\ +/g,"&nbsp;")
+					return val;
+				}
+			},
 			pushCommit() {
 				this.$refs.pushForm.validate().then(res => {
 					this.loading = true
 					const { title, content } = this.pushData
+					console.log(this.pushData)
 					this.$httpRequest('/api/blog/new',{
 						type: 'POST',
 						data: {
-							title,
-							content
+							title: this.textFormat(title),
+							content: this.textFormat(content)
 						}
 					}).then(result=>{
 						this.$refs.uToast.show({
@@ -82,6 +90,8 @@
 							message: `博客发布成功`,
 						})
 						this.loading = false
+						this.pushData.title = ''
+						this.pushData.content = ''
 					}).catch(error =>{
 						this.$refs.uToast.show({
 							type: 'error',

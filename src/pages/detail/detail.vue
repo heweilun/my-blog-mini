@@ -7,7 +7,9 @@
 				<view>{{this.$moment(data.createtime).format('YYYY-MM-DD')}}</view>
 				<view><u--text :text="data.author" type="primary"></u--text></view>
 			</view>
-			<view class="detail_content">{{data.content}}</view>
+			<view class="detail_content">
+				<text :decode="true">{{data.content}}</text>
+			</view>
 		</view>
 	</view>
 </template>

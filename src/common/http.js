@@ -15,7 +15,6 @@ const httpRequest = ((url, options) => {
 		    header: header || {'content-type' : "application/json"},
 		}).then((response) => {
             let [error, res] = response;
-			console.log(error)
 			if(error) {
 				return reject(new Error(error.errMsg))
 			}
@@ -27,7 +26,6 @@ const httpRequest = ((url, options) => {
 			if(res.data.errno !== 0) {
 				return reject(res.data)
 			}
-			
             return resolve(res.data)
         })
 	})

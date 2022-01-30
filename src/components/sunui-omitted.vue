@@ -1,6 +1,6 @@
 <template name='sunui-omitted'>
 	<view :style="sty">
-		<text class='sunui-omitted-uncontent' :style='"-webkit-line-clamp:"+clamp+";"'>{{text}}</text>
+		<text class='sunui-omitted-uncontent' :style='"-webkit-line-clamp:"+clamp+";"' :decode="true">{{text}}</text>
 	</view>
 </template>
 

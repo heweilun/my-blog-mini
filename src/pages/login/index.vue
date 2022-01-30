@@ -85,13 +85,15 @@
 						min: 6,
 						max: 18,
 						message: '密码长度在6-18位之间',
-					},{
-						pattern: /^[0-9a-zA-Z_]*$/g,
-						transform(value) {
-							return String(value);
-						},
-						message: '密码只能包含字母、数字、下划线',
-					}],
+					}
+					// ,{
+					// 	pattern: /^[0-9a-zA-Z_]*$/g,
+					// 	transform(value) {
+					// 		return String(value);
+					// 	},
+					// 	message: '密码只能包含字母、数字、下划线',
+					// },
+					],
 				}
 			}
 		},
